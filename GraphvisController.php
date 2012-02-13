@@ -51,6 +51,16 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		
 		echo json_encode($result);
 	}
+	   
+	public function getrelationsAction(){
+		$this->_helper->layout()->disableLayout();
+		
+		$base = $_GET['uri'];
+		$baseName = '';
+		$result = $this->getGraphRelations($base, $baseName); 
+		
+		echo json_encode($result);
+	}
 	
 	protected function getTreeRelations($base, $baseName){
 		$query = '

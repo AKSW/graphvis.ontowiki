@@ -3,9 +3,8 @@
 	    h = 800,
 		force,
 		vis,
-	    node,
-	    link,
-		text,
+		nodes, links,
+	    node, link, text,
 	    root;
 	
 	var createGraph = function(){
@@ -13,8 +12,7 @@
 		    .size([w, h])
 		    .linkDistance(function(d) { return d.target._children ? 120 : 100; })
 		    .charge(function(d) { return d._children ? -d.size / -400 : -300; })
-			.on("tick", tick)
-		    .start();
+			.on("tick", tick);
 
 		vis = d3.select("#chart").append("svg")
 		    .attr("width", w)
@@ -35,28 +33,26 @@
 			.attr("d", "M0,-5L10,0L0,5");
 		
 		root = {};
-		root.data = $.parseJSON(graphData);
 		root.fixed = true;
 		root.x = w / 2;
 		root.y = h / 2;
+		
+		links = $.parseJSON(graphData);
+		nodes = {};
+		// Compute the distinct nodes from the links.
+		links.forEach(function(l) {
+		  l.source = nodes[l.source] || (nodes[l.source] = {name: l.source, uri:l.sourceUri});
+		  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
+		});
 		
 		updateGraph();
 	} // end createGraph
 	
 	function updateGraph(){
-		var nodes = {};
-		var links = root.data;
-		// Compute the distinct nodes from the links.
-		links.forEach(function(l) {
-		  l.source = nodes[l.source] || (nodes[l.source] = {name: l.source});
-		  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target});
-		});
-		
 		// Restart the force layout.
 		force
 			.nodes(d3.values(nodes))
-		    .links(links)
-		    .start();
+		    .links(links);
 		
 		// Update the links…
 		link = vis.append("g").selectAll("path")
@@ -99,8 +95,8 @@
 		     .attr("y", ".31em")
 		     .attr("class", "shadow")
 		     .text(function(d) { return d.name; });
-
-		//text.exit().remove();
+		
+		force.start();
 	} // end updateGraph
 	
 	// Use elliptical arc path segments to doubly-encode directionality.
@@ -128,14 +124,16 @@
 
 	// Toggle children on click.
 	function click(d) {
-	  if (d.children) {
-	    d._children = d.children;
-	    d.children = null;
-	  } else {
-	    d.children = d._children;
-	    d._children = null;
-	  }
-	  update();
+		var uri = d.uri;
+		var name = d.name;
+		$.getJSON(urlBase+'graphvis/getrelations/?uri='+uri, function(data){
+			data.forEach(function(l) {
+			  l.source = nodes[name] || (nodes[name] = {name: name, uri:uri});
+			  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
+			});
+			links = links.concat(data);
+			updateGraph();
+		});
 	}
 	
 	window.createGraph = createGraph;
