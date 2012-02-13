@@ -100,7 +100,7 @@
 		     .attr("class", "shadow")
 		     .text(function(d) { return d.name; });
 
-		text.exit().remove();
+		//text.exit().remove();
 	} // end updateGraph
 	
 	// Use elliptical arc path segments to doubly-encode directionality.
