@@ -1,8 +1,8 @@
 (function(){ 
 	var w = 1280,
 	    h = 800,
-		force,
 		vis,
+		force,
 		nodes, links,
 	    node, link, text,
 	    root;
@@ -49,11 +49,13 @@
 	} // end createGraph
 	
 	function updateGraph(){
-		// Restart the force layout.
+	    $("#chart svg g").remove();
+	    
+	    // create force layout.
 		force
 			.nodes(d3.values(nodes))
 		    .links(links);
-		
+	
 		// Update the links…
 		link = vis.append("g").selectAll("path")
 		    .data(force.links());
@@ -127,12 +129,14 @@
 		var uri = d.uri;
 		var name = d.name;
 		$.getJSON(urlBase+'graphvis/getrelations/?uri='+uri, function(data){
-			data.forEach(function(l) {
-			  l.source = nodes[name] || (nodes[name] = {name: name, uri:uri});
-			  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
-			});
-			links = links.concat(data);
-			updateGraph();
+		    if(data.length > 0){
+                data.forEach(function(l) {
+                  l.source = nodes[name] || (nodes[name] = {name: name, uri:uri});
+                  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
+                });
+                links = links.concat(data);
+                updateGraph();
+            }
 		});
 	}
 	
