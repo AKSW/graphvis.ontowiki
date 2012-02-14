@@ -1,0 +1,12 @@
+<script>
+$(document).ready(function(){
+    for(var i in relationsData){
+        $("#relationsList").append(
+            '<a href="#" class="relationFilter">'+relationsData[i]+'</a><br/>'
+        );
+    }
+});
+</script>
+<div id="relationsList">
+<a href="#" class="relationFilter">clear all filters</a><br/>
+</div>

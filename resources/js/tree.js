@@ -5,10 +5,17 @@
 	    h = (window.innerHeight - 50) - m[0] - m[2],
 	    i = 0,
 	    duration = 500,
+	    tree,
 	    root;
+	    
+	$('.relationFilter').live('click', function(){
+	    if( tree != null ){
+	        console.log('tree');
+	    }
+	});
 	
 	var createTree = function(){
-		var tree = d3.layout.tree()
+		tree = d3.layout.tree()
 		    .size([h, w]);
 
 		var diagonal = d3.svg.diagonal()
@@ -154,5 +161,11 @@
 		}
 	}
 	
+	var destroyTree = function(){
+	    tree = null;
+	}
+	
+	
 	window.createTree = createTree;
+	window.destroyTree = destroyTree;
 })(window);

@@ -10,8 +10,8 @@
 	var createGraph = function(){
 		force = d3.layout.force()
 		    .size([w, h])
-		    .linkDistance(function(d) { return d.target._children ? 120 : 100; })
-		    .charge(function(d) { return d._children ? -d.size / -400 : -300; })
+		    .linkDistance(function(d) { return d.target._children ? 120 : 200; })
+		    .charge(function(d) { return d._children ? -d.size / -300 : -300; })
 			.on("tick", tick);
 
 		vis = d3.select("#chart").append("svg")
@@ -45,10 +45,10 @@
 		  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
 		});
 		
-		updateGraph();
+		updateGraph(nodes, links);
 	} // end createGraph
 	
-	function updateGraph(){
+	function updateGraph(nodes, links){
 	    $("#chart svg g").remove();
 	    
 	    // create force layout.
@@ -135,10 +135,47 @@
                   l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri});
                 });
                 links = links.concat(data);
-                updateGraph();
+                updateGraph(nodes, links);
             }
 		});
 	}
 	
+	// filter on click
+	$('.relationFilter').live('click', function(){
+	    if( force != null ){
+	        var rel = $(this).text();
+	        
+	        if( rel == "clear all filters" ){
+	            updateGraph(nodes, links);
+	        }else{
+                var fnodes = {};
+                var flinks = [];
+                var l;
+                for(var i in links){
+                    if(links[i].relation == rel){
+                        l = links[i];
+                        if( typeof fnodes[l.source.name] == 'undefined' ){
+                            fnodes[l.source.name] = {name: l.source.name, uri:l.sourceUri};
+                        }
+                        if( typeof fnodes[l.target.name] == 'undefined' ){
+                            fnodes[l.target.name] = {name: l.target.name, uri:l.targetUri};
+                        }
+                        flinks.push({
+                            source: fnodes[l.source.name],
+                            target: fnodes[l.target.name]
+                        });
+                        
+                    }
+                }
+                updateGraph(fnodes, flinks);
+	        }
+	    }
+	});
+	
+	var destroyGraph = function(){
+	    force = null;
+	}
+	
 	window.createGraph = createGraph;
+	window.destroyGraph = destroyGraph;
 })(window)

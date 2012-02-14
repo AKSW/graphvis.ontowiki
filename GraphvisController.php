@@ -11,6 +11,8 @@
 require_once 'OntoWiki/Model/TitleHelper.php';
 
 class GraphvisController extends OntoWiki_Controller_Component {
+    private $relations;
+
     /**
      * receive a ping
      */
@@ -29,15 +31,21 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		$this->view->headScript()->appendFile($url . 'resources/js/tree.js');
 		$this->view->headScript()->appendFile($url . 'resources/js/graph.js');
 		
-		$resource = $this->_owApp->selectedResource;
+		// add module 
+		$this->addModuleContext('main.window.graphvis');
 		
+		$this->relations = array();
+		
+		// get resource info
+		$resource = $this->_owApp->selectedResource;
 		$base = (string)$resource;
 		$baseName = $resource->getTitle();
-		$resultTree = $this->getTreeRelations($base, $baseName); 
-		$resultGraph = $this->getGraphRelations($base, $baseName); 
+		$resultTree = $this->getTreeRelations($base, $baseName, true); 
+		$resultGraph = $this->getGraphRelations($base, $baseName, true); 
 		
 		$this->view->treeData = $resultTree;
 		$this->view->graphData = $resultGraph;
+		$this->view->relationsData = $this->relations;
     }
 
 	
@@ -61,13 +69,12 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		echo json_encode($result);
 	}
 	
-	protected function getTreeRelations($base, $baseName){
+	protected function getTreeRelations($base, $baseName, $fetchRelations = false){
 		$query = '
 			PREFIX aksw: <http://aksw.org/schema/> .
 			SELECT ?relation ?object 
 			WHERE {
 				<'.$base.'> ?relation ?object .
-				FILTER sameTerm(?relation, aksw:relatedProject)
 			}';
 		//echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
@@ -75,6 +82,9 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		
 		$namesArray = array();
 		foreach($relationsResult as $res){
+		    if( $fetchRelations && !in_array($res['relation'],$this->relations) ){
+		        $this->relations[] = $res['relation'];
+		    }
 			$namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation']);
 		}
 		
@@ -88,9 +98,9 @@ class GraphvisController extends OntoWiki_Controller_Component {
             $title = $titleHelper->getTitle($uri);
 
             if (null !== $title) {
-                $result['children'][] = array('name' => $title, 'uri' => $uri );
+                $result['children'][] = array('name' => $title, 'uri' => $uri, 'relation' => $obj['rel'] );
             } else {
-                $result['children'][] = array('name' => OntoWiki_Utils::compactUri($uri), 'uri' => $uri );
+                $result['children'][] = array('name' => OntoWiki_Utils::compactUri($uri), 'uri' => $uri, 'relation' => $obj['rel'] );
             }
         }
 
@@ -99,13 +109,12 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		return $result;
 	}
 	
-	protected function getGraphRelations($base, $baseName){
+	protected function getGraphRelations($base, $baseName, $fetchRelations = false){
 		$query = '
 			PREFIX aksw: <http://aksw.org/schema/> .
 			SELECT ?relation ?object 
 			WHERE {
 				<'.$base.'> ?relation ?object .
-				FILTER sameTerm(?relation, aksw:relatedProject)
 			}';
 		//echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
@@ -113,6 +122,9 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		
 		$namesArray = array();
 		foreach($relationsResult as $res){
+		    if( $fetchRelations && !in_array($res['relation'],$this->relations) ){
+		        $this->relations[] = $res['relation'];
+		    }
 			$namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation']);
 		}
 		
@@ -128,12 +140,14 @@ class GraphvisController extends OntoWiki_Controller_Component {
             if (null !== $title) {
                 $result[] = array(
 					'source' => $baseName, 'sourceUri' => $base, 
-					'target' => $title, 'targetUri' => $uri
+					'target' => $title, 'targetUri' => $uri,
+					'relation' => $obj['rel']
 				);
             } else {
                 $result[] = array(
 					'source' => $baseName, 'sourceUri' => $base, 
-					'target' => OntoWiki_Utils::compactUri($uri), 'targetUri' => $uri 
+					'target' => OntoWiki_Utils::compactUri($uri), 'targetUri' => $uri,
+					'relation' => $obj['rel']
 				);
             }
         }

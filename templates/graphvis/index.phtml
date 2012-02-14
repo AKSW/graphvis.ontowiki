@@ -1,6 +1,7 @@
 <script> 
 	var treeData = '<?php if( isset($this->treeData) ) echo json_encode($this->treeData); ?>';
 	var graphData = '<?php if( isset($this->graphData) ) echo json_encode($this->graphData); ?>';
+	var relationsData = <?php if( isset($this->relationsData) ) echo json_encode($this->relationsData); ?>;
 </script>
 <div><a href="#" id="treeToggle">tree</a> | <a href="#" id="graphToggle">graph</a></div>
 <div id="chart"></div>
