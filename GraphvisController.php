@@ -85,7 +85,7 @@ class GraphvisController extends OntoWiki_Controller_Component
             WHERE {
                 <'.$base.'> ?relation ?object .
                 OPTIONAL { ?object rdf:type ?class }
-                FILTER ( isIRI(?object) )
+                FILTER (str(?relation) != str(rdf:type)).
             }';
         //echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
@@ -139,7 +139,7 @@ class GraphvisController extends OntoWiki_Controller_Component
             WHERE {
                 <'.$base.'> ?relation ?object .
                 OPTIONAL { ?object rdf:type ?class }
-                FILTER ( isIRI(?object) )
+                FILTER (str(?relation) != str(rdf:type)).
             }';
         //echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);

@@ -64,7 +64,7 @@
 
           nodeEnter.append("circle")
               .attr("r", 1e-6)
-              .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+              .style("fill", color);
 
           nodeEnter.append("text")
               .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -80,12 +80,7 @@
 
           nodeUpdate.select("circle")
               .attr("r", 4.5)
-              .style("fill", function(d) {
-                var color = "#fff";
-                if(d._children) color = "lightsteelblue";
-                if(d.loaded === false) color = "black";
-                return color;
-              });
+              .style("fill", color);
 
           nodeUpdate.select("text")
               .style("fill-opacity", 1);
@@ -108,11 +103,15 @@
 
           // Enter any new links at the parent's previous position.
           link.enter().insert("path", "g")
-              .attr("class", "link")
-              .attr("d", function(d) {
+            .attr("class", "link")
+            .attr("d", function(d) {
                 var o = {x: source.x0, y: source.y0};
                 return diagonal({source: o, target: o});
-              })
+            })
+            .style("stroke", function(d){
+                if(typeof d.relation == 'undefined' ) return "#000000";
+                return "#"+stringToColor(d.relation).substr(0,6);
+            })
             .transition()
               .duration(duration)
               .attr("d", diagonal);
@@ -159,6 +158,20 @@
             });
           }
         }
+    }
+
+    // Color leaf nodes orange, and packages white or blue.
+    function color(d) {
+        console.log(d)
+        if( d.class == null || d.class.length < 2 ) return "#FFFFFF";
+        var color = "#"+stringToColor(d.class).substr(0,6);
+
+        if( typeof classesList[d.class] == 'undefined' ){
+            classesList[d.class] = color;
+        }
+
+        return color;
+        //return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
     }
 
     var destroyTree = function(){
