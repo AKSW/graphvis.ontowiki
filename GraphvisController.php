@@ -42,14 +42,14 @@ class GraphvisController extends OntoWiki_Controller_Component
         $this->_relations = array();
 
         // get resource info
-        $resource = $this->_owApp->selectedResource;
-        $base = (string)$resource;
-        $baseName = $resource->getTitle();
-        $resultTree = $this->getTreeRelations($base, $baseName, true);
+        $resource    = $this->_owApp->selectedResource;
+        $base        = (string)$resource;
+        $baseName    = $resource->getTitle();
+        $resultTree  = $this->getTreeRelations($base, $baseName, true);
         $resultGraph = $this->getGraphRelations($base, $baseName, true);
 
-        $this->view->treeData = $resultTree;
-        $this->view->graphData = $resultGraph;
+        $this->view->treeData      = $resultTree;
+        $this->view->graphData     = $resultGraph;
         $this->view->relationsData = $this->_relations;
     }
 
@@ -79,12 +79,14 @@ class GraphvisController extends OntoWiki_Controller_Component
     protected function getTreeRelations($base, $baseName, $fetchRelations = false)
     {
         $query = '
-            PREFIX aksw: <http://aksw.org/schema/> .
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             SELECT ?relation ?object
             WHERE {
                 <'.$base.'> ?relation ?object .
-                    FILTER ( isIRI(?object) )
-    }';
+                    FILTER ( isIRI(?object) ).
+                    FILTER (str(?relation) != str(rdf:type)).
+            }';
+
     //echo $query; die;
     $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
     $relationsResult = $this->_owApp->selectedModel->sparqlQuery($relationsQuery);
@@ -129,12 +131,13 @@ class GraphvisController extends OntoWiki_Controller_Component
     protected function getGraphRelations($base, $baseName, $fetchRelations = false)
     {
         $query = '
-            PREFIX aksw: <http://aksw.org/schema/> .
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             SELECT ?relation ?object
             WHERE {
                 <'.$base.'> ?relation ?object .
-                    FILTER ( isIRI(?object) )
-    }';
+                FILTER ( isIRI(?object) ).
+                FILTER (str(?relation) != str(rdf:type)).
+            }';
     //echo $query; die;
     $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
     $relationsResult = $this->_owApp->selectedModel->sparqlQuery($relationsQuery);
