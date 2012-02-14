@@ -75,6 +75,7 @@ class GraphvisController extends OntoWiki_Controller_Component {
 			SELECT ?relation ?object 
 			WHERE {
 				<'.$base.'> ?relation ?object .
+				FILTER ( isIRI(?object) ) 
 			}';
 		//echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
@@ -115,6 +116,7 @@ class GraphvisController extends OntoWiki_Controller_Component {
 			SELECT ?relation ?object 
 			WHERE {
 				<'.$base.'> ?relation ?object .
+				FILTER ( isIRI(?object) ) 
 			}';
 		//echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
