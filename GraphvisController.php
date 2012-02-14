@@ -15,9 +15,6 @@ class GraphvisController extends OntoWiki_Controller_Component {
      * receive a ping
      */
     public function indexAction() {
-		// disable tabs
-        OntoWiki_Navigation::disableNavigation();
-
 		// self url
 		$url = OntoWiki::getInstance()->extensionManager->getComponentUrl('graphvis');
                                                                        
@@ -32,8 +29,10 @@ class GraphvisController extends OntoWiki_Controller_Component {
 		$this->view->headScript()->appendFile($url . 'resources/js/tree.js');
 		$this->view->headScript()->appendFile($url . 'resources/js/graph.js');
 		
-		$base = "http://aksw.org/Projects/OntoWiki";
-		$baseName = "OntoWiki";
+		$resource = $this->_owApp->selectedResource;
+		
+		$base = (string)$resource;
+		$baseName = $resource->getTitle();
 		$resultTree = $this->getTreeRelations($base, $baseName); 
 		$resultGraph = $this->getGraphRelations($base, $baseName); 
 		
