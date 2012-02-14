@@ -1,6 +1,6 @@
 (function(){ 
-	var w = 1280,
-	    h = 800,
+	var w = (window.innerWidth - 350),
+	    h = (window.innerHeight - 50),
 		vis,
 		force,
 		nodes, links,
