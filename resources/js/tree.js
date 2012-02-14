@@ -6,7 +6,7 @@
         i = 0,
         duration = 500,
         tree, vis, diagonal,
-        root;
+        root, _root;
 
     var createTree = function(){
         tree = d3.layout.tree()
@@ -39,7 +39,7 @@
         updateTree(root);
     }
 
-    function updateTree(root) {
+    function updateTree(source) {
       // Compute the new tree layout.
       var nodes = tree.nodes(root).reverse();
 
@@ -97,18 +97,16 @@
 
       // Enter any new links at the parent's previous position.
       link.enter().insert("path", "g")
+        .style("stroke", function(d){
+            if( typeof d.relation == 'undefined' ) return "#000000";
+            console.log('color: '+"#"+stringToColor(d.relation).substr(0,6));
+            return "#"+stringToColor(d.relation).substr(0,6);
+        })
         .attr("class", "link")
         .attr("d", function(d) {
             var o = {x: source.x0, y: source.y0};
             return diagonal({source: o, target: o});
-        })
-        .style("stroke", function(d){
-            if(typeof d.relation == 'undefined' ) return "#000000";
-            return "#"+stringToColor(d.relation).substr(0,6);
-        })
-        .transition()
-          .duration(duration)
-          .attr("d", diagonal);
+        });
 
       // Transition links to their new position.
       link.transition()
@@ -171,6 +169,8 @@
             var rel = $(this).attr('data-uri');
 
             if( rel == "clear_all_filters" ){
+                root = _root;
+
                 updateTree(root);
             }else{
                 var froot = {};
@@ -180,7 +180,10 @@
                 froot.x0 = h / 2;
                 froot.y0 = 0;
 
-                updateTree(froot);
+                _root = root;
+                root = froot;
+
+                updateTree(root);
             }
         }
     });
