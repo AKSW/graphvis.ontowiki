@@ -42,14 +42,14 @@ class GraphvisController extends OntoWiki_Controller_Component
         $this->_relations = array();
 
         // get resource info
-        $resource = $this->_owApp->selectedResource;
-        $base = (string)$resource;
-        $baseName = $resource->getTitle();
-        $resultTree = $this->getTreeRelations($base, $baseName, true);
+        $resource    = $this->_owApp->selectedResource;
+        $base        = (string)$resource;
+        $baseName    = $resource->getTitle();
+        $resultTree  = $this->getTreeRelations($base, $baseName, true);
         $resultGraph = $this->getGraphRelations($base, $baseName, true);
 
-        $this->view->treeData = $resultTree;
-        $this->view->graphData = $resultGraph;
+        $this->view->treeData      = $resultTree;
+        $this->view->graphData     = $resultGraph;
         $this->view->relationsData = $this->_relations;
     }
 
