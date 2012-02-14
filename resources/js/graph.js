@@ -127,8 +127,13 @@
     function color(d) {
         console.log(d)
         if( d.class == null || d.class.length < 2 ) return "#FFFFFF";
-        console.log("#"+stringToColor(d.class).substr(0,6))
-        return "#"+stringToColor(d.class).substr(0,6);
+        var color = "#"+stringToColor(d.class).substr(0,6);
+
+        if( typeof classesList[d.class] == 'undefined' ){
+            classesList[d.class] = color;
+        }
+
+        return color;
         //return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
     }
 

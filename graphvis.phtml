@@ -2,17 +2,27 @@
 /* override default size and make it smaller */
 div.innerwindows {
     width: 20% !important;
-}  
+}
 div.window div.has-innerwindows div.innercontent {
     width: 80% !important;
 }
 </style>
 <script>
+var classesList = {};
+
 // on ready render properties
 $(document).ready(function(){
+    var rel = $("#relationsList");
     for(var i in relationsData){
-        $("#relationsList").append(
+        rel.append(
             '<a href="#" class="relationFilter">'+relationsData[i]+'</a><br/>'
+        );
+    }
+
+    var legend = $("#classesLegend");
+    for(i in classesList){
+        legend.append(
+            '<span style="color:'+classesList[i]+';">'+i+'</span><br/>'
         );
     }
 });
@@ -21,4 +31,8 @@ $(document).ready(function(){
 <br/>
 <div id="relationsList">
 <a href="#" class="relationFilter">clear all filters</a><br/>
+</div>
+<br/>
+<div id="classesLegend">
+Colors:<br/>
 </div>

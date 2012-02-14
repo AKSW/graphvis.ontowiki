@@ -96,7 +96,7 @@ class GraphvisController extends OntoWiki_Controller_Component
             if ($fetchRelations && !in_array($res['relation'], $this->_relations)) {
                 $this->_relations[] = $res['relation'];
             }
-            $namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation'], 'class' => $obj['class']);
+            $namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation'], 'class' => $res['class']);
         }
 
         // add uris to title helper
