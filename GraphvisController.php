@@ -137,7 +137,8 @@ class GraphvisController extends OntoWiki_Controller_Component
                 <'.$base.'> ?relation ?object .
                     FILTER ( isIRI(?object) ).
                     FILTER (str(?relation) != str(rdf:type)).
-        }';
+            }';
+
         //echo $query; die;
         $relationsQuery = Erfurt_Sparql_SimpleQuery :: initWithString($query);
         $relationsResult = $this->_owApp->selectedModel->sparqlQuery($relationsQuery);
@@ -174,8 +175,8 @@ class GraphvisController extends OntoWiki_Controller_Component
             }
         }
 
-    //echo "<pre>";
-    //print_r($result); die;
-    return $result;
+        //echo "<pre>";
+        //print_r($result); die;
+        return $result;
     }
 }
