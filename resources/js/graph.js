@@ -41,8 +41,8 @@
         nodes = {};
         // Compute the distinct nodes from the links.
         links.forEach(function(l) {
-          l.source = nodes[l.source] || (nodes[l.source] = {name: l.source, uri:l.sourceUri, class:l.class});
-          l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri, class:l.class});
+          l.source = nodes[l.source] || (nodes[l.source] = {name: l.source, uri:l.sourceUri, class:l.class, classLabel: l.classLabel});
+          l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri, class:l.class, classLabel: l.classLabel});
         });
 
         updateGraph(nodes, links);
@@ -129,8 +129,8 @@
         if( d.class == null || d.class.length < 2 ) return "#FFFFFF";
         var color = "#"+stringToColor(d.class).substr(0,6);
 
-        if( typeof classesList[d.class] == 'undefined' ){
-            classesList[d.class] = color;
+        if( typeof classesList[d.classLabel] == 'undefined' ){
+            classesList[d.classLabel] = color;
         }
 
         return color;
@@ -144,8 +144,8 @@
         $.getJSON(urlBase+'graphvis/getrelations/?uri='+uri, function(data){
             if(data.length > 0){
                 data.forEach(function(l) {
-                  l.source = nodes[name] || (nodes[name] = {name: name, uri:uri, class:l.class});
-                  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri, class:l.class});
+                  l.source = nodes[name] || (nodes[name] = {name: name, uri:uri, class:l.class, classLabel: l.classLabel});
+                  l.target = nodes[l.target] || (nodes[l.target] = {name: l.target, uri:l.targetUri, class:l.class, classLabel: l.classLabel});
                 });
                 links = links.concat(data);
                 updateGraph(nodes, links);
@@ -168,10 +168,10 @@
                     if(links[i].relation == rel){
                         l = links[i];
                         if( typeof fnodes[l.source.name] == 'undefined' ){
-                            fnodes[l.source.name] = {name: l.source.name, uri:l.sourceUri, class:l.class};
+                            fnodes[l.source.name] = {name: l.source.name, uri:l.sourceUri, class:l.class, classLabel: l.classLabel};
                         }
                         if( typeof fnodes[l.target.name] == 'undefined' ){
-                            fnodes[l.target.name] = {name: l.target.name, uri:l.targetUri, class:l.class};
+                            fnodes[l.target.name] = {name: l.target.name, uri:l.targetUri, class:l.class, classLabel: l.classLabel};
                         }
                         flinks.push({
                             source: fnodes[l.source.name],

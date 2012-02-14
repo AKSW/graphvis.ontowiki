@@ -92,9 +92,13 @@ class GraphvisController extends OntoWiki_Controller_Component
         $relationsResult = $this->_owApp->selectedModel->sparqlQuery($relationsQuery);
 
         $namesArray = array();
+        $objectsArray = array();
         foreach ($relationsResult as $res) {
-            if ($fetchRelations && !in_array($res['relation'], $this->_relations)) {
-                $this->_relations[] = $res['relation'];
+            if ( !in_array($res['relation'], $objectsArray) ) {
+                $objectsArray[] = $res['relation'];
+            }
+            if ( !in_array($res['class'], $objectsArray) ) {
+                $objectsArray[] = $res['class'];
             }
             $namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation'], 'class' => $res['class']);
         }
@@ -102,25 +106,32 @@ class GraphvisController extends OntoWiki_Controller_Component
         // add uris to title helper
         $titleHelper = new OntoWiki_Model_TitleHelper($this->_owApp->selectedModel);
         $titleHelper->addResources(array_keys($namesArray));
+        $titleHelper->addResources(array_keys($objectsArray));
 
         // get names
         $result = array('name' => $baseName, 'children' => array());
         foreach ($namesArray as $uri => $obj) {
             $title = $titleHelper->getTitle($uri);
 
+            if ($fetchRelations && !isset($this->_relations[$obj['rel']]) ) {
+                $this->_relations[$obj['rel']] = $titleHelper->getTitle($obj['rel']);
+            }
+
             if (null !== $title) {
                 $result['children'][] = array(
                     'name' => $title,
                     'uri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $obj['class']
+                    'class' => $obj['class'],
+                    'classLabel' => $titleHelper->getTitle($obj['class'])
                 );
             } else {
                 $result['children'][] = array(
                     'name' => OntoWiki_Utils::compactUri($uri),
                     'uri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $obj['class']
+                    'class' => $obj['class'],
+                    'classLabel' => $titleHelper->getTitle($obj['class'])
                 );
             }
         }
@@ -147,8 +158,11 @@ class GraphvisController extends OntoWiki_Controller_Component
 
         $namesArray = array();
         foreach ($relationsResult as $res) {
-            if ($fetchRelations && !in_array($res['relation'], $this->_relations)) {
-                $this->_relations[] = $res['relation'];
+            if ( !in_array($res['relation'], $objectsArray) ) {
+                $objectsArray[] = $res['relation'];
+            }
+            if ( !in_array($res['class'], $objectsArray) ) {
+                $objectsArray[] = $res['class'];
             }
             $namesArray[$res['object']] = array('name' => '', 'rel' => $res['relation'], 'class' => $res['class']);
         }
@@ -156,25 +170,32 @@ class GraphvisController extends OntoWiki_Controller_Component
         // add uris to title helper
         $titleHelper = new OntoWiki_Model_TitleHelper($this->_owApp->selectedModel);
         $titleHelper->addResources(array_keys($namesArray));
+        $titleHelper->addResources(array_keys($objectsArray));
 
         // get names
         $result = array();
         foreach ($namesArray as $uri => $obj) {
             $title = $titleHelper->getTitle($uri);
 
+            if ($fetchRelations && !isset($this->_relations[$obj['rel']]) ) {
+                $this->_relations[$obj['rel']] = $titleHelper->getTitle($obj['rel']);
+            }
+
             if (null !== $title) {
                 $result[] = array(
                     'source' => $baseName, 'sourceUri' => $base,
                     'target' => $title, 'targetUri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $obj['class']
+                    'class' => $obj['class'],
+                    'classLabel' => $titleHelper->getTitle($obj['class'])
                 );
             } else {
                 $result[] = array(
                     'source' => $baseName, 'sourceUri' => $base,
                     'target' => OntoWiki_Utils::compactUri($uri), 'targetUri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $obj['class']
+                    'class' => $obj['class'],
+                    'classLabel' => $titleHelper->getTitle($obj['class'])
                 );
             }
         }

@@ -109,6 +109,7 @@
                 return diagonal({source: o, target: o});
             })
             .style("stroke", function(d){
+                console.log(d)
                 if(typeof d.relation == 'undefined' ) return "#000000";
                 return "#"+stringToColor(d.relation).substr(0,6);
             })
@@ -162,7 +163,6 @@
 
     // Color leaf nodes orange, and packages white or blue.
     function color(d) {
-        console.log(d)
         if( d.class == null || d.class.length < 2 ) return "#FFFFFF";
         var color = "#"+stringToColor(d.class).substr(0,6);
 
