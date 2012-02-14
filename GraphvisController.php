@@ -80,10 +80,11 @@ class GraphvisController extends OntoWiki_Controller_Component
     {
         $query = '
             PREFIX aksw: <http://aksw.org/schema/> .
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             SELECT ?relation ?object ?class
             WHERE {
                 <'.$base.'> ?relation ?object .
-                OPTIONAL { ?object a ?class }
+                OPTIONAL { ?object rdf:type ?class }
                 FILTER ( isIRI(?object) )
             }';
         //echo $query; die;
@@ -133,10 +134,11 @@ class GraphvisController extends OntoWiki_Controller_Component
     {
         $query = '
             PREFIX aksw: <http://aksw.org/schema/> .
-            SELECT ?relation ?object
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            SELECT ?relation ?object ?class
             WHERE {
                 <'.$base.'> ?relation ?object .
-                OPTIONAL { ?object a ?class }
+                OPTIONAL { ?object rdf:type ?class }
                 FILTER ( isIRI(?object) )
             }';
         //echo $query; die;
@@ -165,14 +167,14 @@ class GraphvisController extends OntoWiki_Controller_Component
                     'source' => $baseName, 'sourceUri' => $base,
                     'target' => $title, 'targetUri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $res['class']
+                    'class' => $obj['class']
                 );
             } else {
                 $result[] = array(
                     'source' => $baseName, 'sourceUri' => $base,
                     'target' => OntoWiki_Utils::compactUri($uri), 'targetUri' => $uri,
                     'relation' => $obj['rel'],
-                    'class' => $res['class']
+                    'class' => $obj['class']
                 );
             }
         }
