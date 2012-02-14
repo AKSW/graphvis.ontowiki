@@ -157,6 +157,7 @@ class GraphvisController extends OntoWiki_Controller_Component
         $relationsResult = $this->_owApp->selectedModel->sparqlQuery($relationsQuery);
 
         $namesArray = array();
+        $objectsArray = array();
         foreach ($relationsResult as $res) {
             if ( !in_array($res['relation'], $objectsArray) ) {
                 $objectsArray[] = $res['relation'];
