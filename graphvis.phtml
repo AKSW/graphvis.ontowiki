@@ -15,7 +15,7 @@ $(document).ready(function(){
     var rel = $("#relationsList");
     for(var i in relationsData){
         rel.append(
-            '<a href="#" class="relationFilter">'+relationsData[i]+'</a><br/>'
+            '<a href="#" class="relationFilter" data-uri="'+i+'">'+relationsData[i]+'</a><br/>'
         );
     }
 
@@ -30,7 +30,7 @@ $(document).ready(function(){
 <div><a href="#" id="treeToggle">tree</a> | <a href="#" id="graphToggle">graph</a></div>
 <br/>
 <div id="relationsList">
-<a href="#" class="relationFilter">clear all filters</a><br/>
+<a href="#" class="relationFilter" data-uri="clear_all_filters">clear all filters</a><br/>
 </div>
 <br/>
 <div id="classesLegend">

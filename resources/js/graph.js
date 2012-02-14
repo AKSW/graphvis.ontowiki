@@ -125,7 +125,6 @@
 
     // Color leaf nodes orange, and packages white or blue.
     function color(d) {
-        console.log(d)
         if( d.class == null || d.class.length < 2 ) return "#FFFFFF";
         var color = "#"+stringToColor(d.class).substr(0,6);
 
@@ -156,9 +155,9 @@
     // filter on click
     $('.relationFilter').live('click', function(){
         if( force != null ){
-            var rel = $(this).text();
+            var rel = $(this).attr('data-uri');
 
-            if( rel == "clear all filters" ){
+            if( rel == "clear_all_filters" ){
                 updateGraph(nodes, links);
             }else{
                 var fnodes = {};
