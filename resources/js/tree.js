@@ -98,9 +98,8 @@
       // Enter any new links at the parent's previous position.
       link.enter().insert("path", "g")
         .style("stroke", function(d){
-            if( typeof d.relation == 'undefined' ) return "#000000";
-            console.log('color: '+"#"+stringToColor(d.relation).substr(0,6));
-            return "#"+stringToColor(d.relation).substr(0,6);
+            if( typeof d.target.relation == 'undefined' ) return "#000000";
+            return "#"+stringToColor(d.target.relation).substr(0,6);
         })
         .attr("class", "link")
         .attr("d", function(d) {
