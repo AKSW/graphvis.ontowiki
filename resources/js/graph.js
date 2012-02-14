@@ -62,8 +62,12 @@
 
 		// Enter any new links.
 		link.enter().append("path")
-			.attr("class", function(d) { return "link " + d.type; })
-			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+			.attr("class", "link")
+			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
+			.style("stroke", function(d){ 
+			    if(typeof d.relation == 'undefined' ) return "#000000";
+    			return "#"+stringToColor(d.relation).substr(0,6); 
+    		});
 
 		 // Exit any old links.
 		 link.exit().remove();
@@ -121,7 +125,10 @@
 	
 	// Color leaf nodes orange, and packages white or blue.
 	function color(d) {
-	  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+	    if(typeof d.name == 'undefined' ) return "#3182bd";
+	    console.log("#"+stringToColor(d.name).substr(0,6))
+	    return "#"+stringToColor(d.name).substr(0,6);
+	    //return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
 	}
 
 	// Toggle children on click.

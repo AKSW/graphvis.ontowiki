@@ -1,4 +1,14 @@
+<style>
+/* override default size and make it smaller */
+div.innerwindows {
+    width: 20% !important;
+}  
+div.window div.has-innerwindows div.innercontent {
+    width: 80% !important;
+}
+</style>
 <script>
+// on ready render properties
 $(document).ready(function(){
     for(var i in relationsData){
         $("#relationsList").append(
@@ -7,6 +17,8 @@ $(document).ready(function(){
     }
 });
 </script>
+<div><a href="#" id="treeToggle">tree</a> | <a href="#" id="graphToggle">graph</a></div>
+<br/>
 <div id="relationsList">
 <a href="#" class="relationFilter">clear all filters</a><br/>
 </div>
