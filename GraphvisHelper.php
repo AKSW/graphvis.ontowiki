@@ -29,7 +29,7 @@ class GraphvisHelper extends OntoWiki_Component_Helper
                 && $request->getParam('mode') == 'multi'
             )
         ) {
-            OntoWiki_Navigation::register(
+            OntoWiki::getInstance()->getNavigation()->register(
                 'graphvis',
                 array(
                     'controller' => 'graphvis',
@@ -39,7 +39,7 @@ class GraphvisHelper extends OntoWiki_Component_Helper
                 )
             );
         } else {
-            OntoWiki_Navigation::register(
+            OntoWiki::getInstance()->getNavigation()->register(
                 'graphvis', array(
                     'controller' => 'graphvis',
                     'action'     => 'index',
