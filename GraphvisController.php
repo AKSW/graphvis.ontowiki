@@ -111,10 +111,10 @@ class GraphvisController extends OntoWiki_Controller_Component
         // get names
         $result = array('name' => $baseName, 'children' => array());
         foreach ($namesArray as $uri => $obj) {
-            $title = $titleHelper->getTitle($uri);
+            $title = $uri;//$titleHelper->getTitle($uri);
 
             if ($fetchRelations && !isset($this->_relations[$obj['rel']]) ) {
-                $this->_relations[$obj['rel']] = $titleHelper->getTitle($obj['rel']);
+                $this->_relations[$obj['rel']] = $obj['rel'];//$titleHelper->getTitle($obj['rel']);
             }
 
             if (null !== $title) {
@@ -123,7 +123,7 @@ class GraphvisController extends OntoWiki_Controller_Component
                     'uri' => $uri,
                     'relation' => $obj['rel'],
                     'class' => $obj['class'],
-                    'classLabel' => $titleHelper->getTitle($obj['class'])
+                    'classLabel' => $obj['class']//$titleHelper->getTitle($obj['class'])
                 );
             } else {
                 $result['children'][] = array(
@@ -131,7 +131,7 @@ class GraphvisController extends OntoWiki_Controller_Component
                     'uri' => $uri,
                     'relation' => $obj['rel'],
                     'class' => $obj['class'],
-                    'classLabel' => $titleHelper->getTitle($obj['class'])
+                    'classLabel' => $obj['class']//$titleHelper->getTitle($obj['class'])
                 );
             }
         }
@@ -176,10 +176,10 @@ class GraphvisController extends OntoWiki_Controller_Component
         // get names
         $result = array();
         foreach ($namesArray as $uri => $obj) {
-            $title = $titleHelper->getTitle($uri);
+            $title = $uri;//$titleHelper->getTitle($uri);
 
             if ($fetchRelations && !isset($this->_relations[$obj['rel']]) ) {
-                $this->_relations[$obj['rel']] = $titleHelper->getTitle($obj['rel']);
+                $this->_relations[$obj['rel']] = $obj['rel']; //$titleHelper->getTitle($obj['rel']);
             }
 
             if (null !== $title) {
@@ -188,7 +188,7 @@ class GraphvisController extends OntoWiki_Controller_Component
                     'target' => $title, 'targetUri' => $uri,
                     'relation' => $obj['rel'],
                     'class' => $obj['class'],
-                    'classLabel' => $titleHelper->getTitle($obj['class'])
+                    'classLabel' => $obj['class']//$titleHelper->getTitle($obj['class'])
                 );
             } else {
                 $result[] = array(
@@ -196,7 +196,7 @@ class GraphvisController extends OntoWiki_Controller_Component
                     'target' => OntoWiki_Utils::compactUri($uri), 'targetUri' => $uri,
                     'relation' => $obj['rel'],
                     'class' => $obj['class'],
-                    'classLabel' => $titleHelper->getTitle($obj['class'])
+                    'classLabel' => $obj['class']//$titleHelper->getTitle($obj['class'])
                 );
             }
         }
