@@ -79,8 +79,8 @@ class GraphvisController extends OntoWiki_Controller_Component
     protected function getTreeRelations($base, $baseName, $fetchRelations = false)
     {
         $query = '
-            PREFIX aksw: <http://aksw.org/schema/> .
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            PREFIX aksw: <http://aksw.org/schema/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             SELECT ?relation ?object ?class
             WHERE {
                 <'.$base.'> ?relation ?object .
@@ -144,8 +144,8 @@ class GraphvisController extends OntoWiki_Controller_Component
     protected function getGraphRelations($base, $baseName, $fetchRelations = false)
     {
         $query = '
-            PREFIX aksw: <http://aksw.org/schema/> .
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            PREFIX aksw: <http://aksw.org/schema/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             SELECT ?relation ?object ?class
             WHERE {
                 <'.$base.'> ?relation ?object .
