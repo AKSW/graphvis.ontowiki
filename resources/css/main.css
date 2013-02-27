@@ -37,3 +37,5 @@ text {
   font: 10px sans-serif;
   pointer-events: none;
 }
+
+.linktext { pointer-events: none; font: 9px sans-serif; fill: #000000; }

@@ -4,7 +4,7 @@
         vis,
         force,
         nodes, links,
-        node, link, text,
+        node, link, text, linkText,
         root;
 
     var createGraph = function(){
@@ -68,6 +68,12 @@
                 if(typeof d.relation == 'undefined' ) return "#000000";
                 return "#"+stringToColor(d.relation).substr(0,6);
             });
+
+        link.append("text")
+            .attr("class", "linktext")
+            .attr("dx", function(d) { return d.source.x; })
+            .attr("dy", function(d) { return d.source.y; })
+            .text("some text to add...")
 
          // Exit any old links.
          link.exit().remove();
